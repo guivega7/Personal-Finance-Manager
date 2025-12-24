@@ -1,12 +1,9 @@
 package com.example.financetracker.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -22,8 +19,21 @@ public class Expense {
     @Positive(message = "Amount must be greater than zero")
     private BigDecimal amount;
 
-    @NotNull
+    @NotBlank(message = "Date is required")
     private String date;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Long getId() {
         return id;

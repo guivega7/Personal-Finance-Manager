@@ -11,13 +11,11 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public User saveUser(User user){
-        String plainPassword = user.getPassword();
-
-        String encodedPassword = encoder.encode(plainPassword);
-
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
         return userRepository.save(user);
