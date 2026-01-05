@@ -3,7 +3,6 @@ package com.example.financetracker.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -26,6 +25,9 @@ public class Expense {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private boolean typeOfAmount;
+
+    //Geters and Setters
 
     public User getUser() {
         return user;
@@ -66,6 +68,15 @@ public class Expense {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public boolean isTypeOfAmount() {
+        return typeOfAmount;
+    }
+
+    public void setTypeOfAmount(boolean typeOfAmount) {
+        this.typeOfAmount = typeOfAmount;
+    }
 }
+
 
 

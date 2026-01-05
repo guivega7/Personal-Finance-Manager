@@ -29,15 +29,43 @@
 </nav>
 
 <div class="container">
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card p-3 text-center">
+                <div class="text-muted">Total Entrada</div>
+                <div class="h4 mt-2 text-success" th:text="${totalIncome != null ? #numbers.formatCurrency(totalIncome) : '$0.00'}">$0.00</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 text-center">
+                <div class="text-muted">Total Saída</div>
+                <div class="h4 mt-2 text-danger" th:text="${totalExpense != null ? #numbers.formatCurrency(totalExpense) : '$0.00'}">$0.00</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 text-center">
+                <div class="text-muted">Saldo</div>
+                <div class="h4 mt-2" th:classappend="${balance != null and balance.signum() >= 0} ? ' text-success' : ' text-danger'" th:text="${balance != null ? #numbers.formatCurrency(balance) : '$0.00'}">$0.00</div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
 
         <div class="col-md-4">
             <div class="card p-4 mb-4">
-                <h4 class="mb-3 text-primary">New Expense</h4>
+                <h4 class="mb-3 text-primary">New Transaction</h4>
                 <form th:action="@{/save}" method="post">
                     <div class="mb-3">
+                        <label class="form-label fw-bold">Type</label>
+                        <select name="typeOfAmount" class="form-select">
+                            <option value="false">Expense (Saída)</option>
+                            <option value="true">Income (Entrada)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label fw-bold">Description</label>
-                        <input type="text" name="description" class="form-control" placeholder="Ex: Grocery, Internet..." required>
+                        <input type="text" name="description" class="form-control" placeholder="Ex: Grocery, Salary..." required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold">Amount ($)</label>
@@ -47,7 +75,7 @@
                         <label class="form-label fw-bold">Date</label>
                         <input type="date" name="date" class="form-control" required>
                     </div>
-                    <button type="submit" class="btn btn-success w-100 py-2">Add Expense</button>
+                    <button type="submit" class="btn btn-success w-100 py-2">Add Transaction</button>
                 </form>
             </div>
         </div>
@@ -69,18 +97,19 @@
                         <tr th:each="expense : ${expenses}">
                             <td th:text="${expense.date}">2025-01-01</td>
                             <td th:text="${expense.description}">Description</td>
-                            <td class="fw-bold text-danger">
+                            <td class="fw-bold" th:classappend="${expense.typeOfAmount} ? 'text-success' : 'text-danger'">
+                                <span th:text="${expense.typeOfAmount ? '+' : '-'}"></span>
                                 <span th:text="${expense.amount != null ? #numbers.formatCurrency(expense.amount) : '$0.00'}"></span>
                             </td>
                             <td class="text-center">
                                 <a th:href="@{/delete/{id}(id=${expense.id})}"
                                    class="btn btn-sm btn-outline-danger"
-                                   onclick="return confirm('Delete this expense?')">Delete</a>
+                                   onclick="return confirm('Delete this transaction?')">Delete</a>
                             </td>
                         </tr>
                         <tr th:if="${expenses == null or expenses.empty}">
                             <td colspan="4" class="text-center text-muted py-4">
-                                No expenses found. Your list is empty!
+                                No transactions found. Your list is empty!
                             </td>
                         </tr>
                         </tbody>
